@@ -5,7 +5,7 @@
     "release": "shadow-cljs -A:dev release app && yarn styles-release",
     "styles-dev": "onchange -o '> public/main.css && lightningcss --bundle public/main.css -o public/main.css' -i src/**/*.css -- cat src/**/*.css",
     "styles-release": "cat src/**/*.css > public/main.css && lightningcss --minify --bundle public/main.css -o public/main.css",
-    "fmt": "clojure -M:cljfmt-fix && clojure -M:nsorg-fix src",
+    "fmt": "clojure -M:nsorg-fix src test && clojure -M:cljfmt-fix src *.edn test",
     "check-fmt": "clojure -M:nsorg-check src test && clojure -M:cljfmt-check src *.edn test",
     "lint": "clojure -M:lint"
   },
