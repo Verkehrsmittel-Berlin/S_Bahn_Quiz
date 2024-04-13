@@ -8,31 +8,33 @@
                                  :on-click #(set-answer! no)}
      children))
 
-(def questions [{:question "Wo endet die S26?"
-                 :answers ["Blankenburg und Teltow Stadt"
-                           "Yorkstr. und Südkreuz"
-                           "Flughafen Berlin Brandenburg und Waßmannsdorf"
-                           "Gesundbrunnen und Potsdamer Platz"]}
-                {:question "Welche Linien fahren über Südkreuz und Gesundbrunnen?"
-                 :answers ["S2, S25, S26, S41, S42"
-                           "S1, S2, S25, S26"
-                           "S2, S41, S42, S45, S46"
-                           "S3, S5, S7, S9, S75"]}
-                {:question "Wie viele S-Bahn Linien gibt es in Berlin?"
-                 :answers ["16"
-                           "85"
-                           "9"
-                           "15"]}
-                {:question "Wie viele Triebfahrzeugführer*innen gibt es bei der S-Bahn Berlin? (Stand: 2023)"
-                 :answers ["1.278"
-                           "3.005"
-                           "178"
-                           "2.865"]}
-                {:question "Wann wurde die S-Bahn Berlin als GmbH gegründet?"
-                 :answers ["Am 1. Januar 1995"
-                           "Am 1. Januar 1994"
-                           "Am 1. Janaur 2002"
-                           "Am 2. Januar 2002"]}])
+(def questions (->> [{:question "Wo endet die S26?"
+                      :answers ["Blankenburg und Teltow Stadt"
+                                "Yorkstr. und Südkreuz"
+                                "Flughafen Berlin Brandenburg und Waßmannsdorf"
+                                "Gesundbrunnen und Potsdamer Platz"]}
+                     {:question "Welche Linien fahren über Südkreuz und Gesundbrunnen?"
+                      :answers ["S2, S25, S26, S41, S42"
+                                "S1, S2, S25, S26"
+                                "S2, S41, S42, S45, S46"
+                                "S3, S5, S7, S9, S75"]}
+                     {:question "Wie viele S-Bahn Linien gibt es in Berlin?"
+                      :answers ["16"
+                                "85"
+                                "9"
+                                "15"]}
+                     {:question "Wie viele Triebfahrzeugführer*innen gibt es bei der S-Bahn Berlin? (Stand: 2023)"
+                      :answers ["1.278"
+                                "3.005"
+                                "178"
+                                "2.865"]}
+                     {:question "Wann wurde die S-Bahn Berlin als GmbH gegründet?"
+                      :answers ["Am 1. Januar 1995"
+                                "Am 1. Januar 1994"
+                                "Am 1. Janaur 2002"
+                                "Am 2. Januar 2002"]}]
+                    (sort-by #(rand))
+                    (vec)))
 
 (defui question [{:keys [answer set-answer! on-submit]
                   {:keys [question answers]} :question}]
@@ -74,7 +76,7 @@
             "Deine Antwort ist leider falsch. Probiers beim nächsten mal.")
           ($ :div
              (if last-question?
-               "Super, du hast das Quiz gemeistert!"
+               "Du hast das Quiz geschafft! Du bist ein echter Profi!"
                ($ :div.action
                   ($ :button.btn.btn-primary {:on-click #(next-question!)} "Nächste Frage"))))))))
 
