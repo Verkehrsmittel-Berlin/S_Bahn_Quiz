@@ -38,13 +38,30 @@
 
 (defui question [{:keys [answer set-answer! on-submit]
                   {:keys [question answers]} :question}]
-  (let [[rand-answers set-rand-answers!] (uix/use-state [])]
+  (let [[rand-answers set-rand-answers!] (uix/use-state [])
+        [begin _] (uix/use-state (js/Date.))
+        [timeout-pct set-timeout-pct!] (uix/use-state 0)]
     (uix/use-effect
      (fn []
        (set-rand-answers! (->> (map-indexed (fn [idx answer-text] [idx answer-text]) answers)
                                (sort-by (fn [_] (rand))))))
      [answers])
+    (uix/use-effect
+     (fn []
+       (js/setTimeout (fn []
+                        (let [now (js/Date.)
+                              elapsed (- now begin)
+                              pct (/ (* elapsed 100)
+                                     20000)]
+                          (set-timeout-pct! (if (< pct 100) pct 100))))
+                      100)
+       (when (= timeout-pct 100)
+         (on-submit)))
+     [timeout-pct])
     ($ :div
+       ($ :div {:style {:background "red"
+                        :height "3px"
+                        :width (str timeout-pct "%")}})
        ($ :h2 question)
        ($ :div.d-grid.gap-2
           (map (fn [[idx answer-text]]
