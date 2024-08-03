@@ -33,12 +33,12 @@
                                "110"
                                "115"
                                "90"]}
-                     {:question "Wann fuhr die erste S Bahn auf der Stadtbahn nach der Wiedervereinigung von Berlin & Deutschland?"
+                    {:question "Wann fuhr die erste S Bahn auf der Stadtbahn nach der Wiedervereinigung von Berlin & Deutschland?"
                      :answers ["2. Juli 1990"
                                "1. Juli 1990"
                                "3. Oktober 1990"
                                "4. Oktober 1990"]}
-                     {:question "Welche S Bahn hat 2023 im Durchschnitt die meiste Verspaetung bekommen?"
+                    {:question "Welche S Bahn hat 2023 im Durchschnitt die meiste Verspaetung bekommen?"
                      :answers ["S25"
                                "S1"
                                "S8"
