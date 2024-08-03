@@ -33,6 +33,16 @@
                                "110"
                                "115"
                                "90"]}
+                     {:question "Wann fuhr die erste S Bahn auf der Stadtbahn nach der Wiedervereinigung von Berlin & Deutschland?"
+                     :answers ["2. Juli 1990"
+                               "1. Juli 1990"
+                               "3. Oktober 1990"
+                               "4. Oktober 1990"]}
+                     {:question "Welche S Bahn hat 2023 im Durchschnitt die meiste Verspaetung bekommen?"
+                     :answers ["S25"
+                               "S1"
+                               "S8"
+                               "S85"]}
                     {:question "Wann wurde die S-Bahn Berlin als GmbH gegründet?"
                      :answers ["Am 1. Januar 1995"
                                "Am 1. Januar 1994"
@@ -117,7 +127,7 @@
      "Herzlich Willkommen bei meinem Quiz. Wenn du alle Fragen richtig beantwortest, dann kennst du Berlin und seine Verkehrsmittel gut."
      ($ :div.action
         ($ :button.btn.btn-outline-danger.btn-lg {:on-click #(set-screen! :question)} "Zum Quiz"))
-     ($ :div.beta "BETA Version 0.0.4 | Was ist neu? Ein Nochmal-Spielen-Button, ein 30 Sekunden Timer. Viel Spass mit der neuen Version!")))
+     ($ :div.beta "BETA Version 0.0.5 | Was ist neu? Neue Fragen & behobene Fehler/Bugs.")))
 
 (defui app []
   (let [[answer set-answer!] (uix/use-state nil)
