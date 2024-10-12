@@ -13,11 +13,11 @@
                                "Yorkstr. und Südkreuz"
                                "Flughafen Berlin Brandenburg und Waßmannsdorf"
                                "Gesundbrunnen und Potsdamer Platz"]}
-                    {:question "Welche Linien fahren über Südkreuz und Gesundbrunnen?"
-                     :answers ["S2, S25, S26, S41, S42"
-                               "S1, S2, S25, S26"
-                               "S2, S41, S42, S45, S46"
-                               "S3, S5, S7, S9, S75"]}
+                    {:question "Wann wurde die Br. 485 ausgemustert?"
+                     :answers ["12. November 2023"
+                               "1. Dezember 2023"
+                               "12. Dezember 2023"
+                               "1. Januar 2024"]}
                     {:question "Wie viele S-Bahn Linien gibt es in Berlin?"
                      :answers ["16"
                                "85"
