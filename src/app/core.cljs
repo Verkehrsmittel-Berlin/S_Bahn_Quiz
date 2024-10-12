@@ -126,36 +126,63 @@
      ($ :div "Von Verkehrsmittel Berlin")
      "Herzlich Willkommen bei meinem Quiz. Wenn du alle Fragen richtig beantwortest, dann kennst du Berlin und seine Verkehrsmittel gut."
      ($ :div.action
-        ($ :button.btn.btn-outline-danger.btn-lg {:on-click #(set-screen! :question)} "Zum Quiz"))
-     ($ :div.beta "BETA Version 0.0.5 | Was ist neu? Neue Fragen & behobene Fehler/Bugs.")))
+        ($ :button.btn.btn-outline-danger.btn-lg {:on-click #(set-screen! :question)} "Level 1"))
+     ($ :div.beta "BETA Version 0.0.6 | Was ist neu? Hintergruende. Frage wurde ausgetauscht. \"Level\".")))
 
+(defui backgrounds []
+  (let [[opacity set-opacity!] (uix/use-state 0)
+        [images set-images!] (uix/use-state ["bg_erkner.webp" "bg_hh.webp" "bg_tds.webp"])
+        transition 1000
+        frames 24.0
+        wait-time 10000]
+    (uix/use-effect
+     (fn []
+       (dotimes [n 24]
+         (js/setTimeout (fn []
+                          (set-opacity! (/ n frames)))
+                        (+ wait-time (* n (/ transition frames)))))
+       (js/setTimeout
+        (fn []
+          (set-opacity! 0)
+          (set-images! (-> (rest images)
+                           (vec)
+                           (conj (first images)))))
+        (+ wait-time transition)))
+     [images])
+    ($ :<>
+       ($ :div.background {:style {:background-image (str "url(" (first images) ")")}})
+       ($ :div.background {:style {:background-image (str "url(" (second images) ")")
+                                   :opacity opacity}}))))
 (defui app []
   (let [[answer set-answer!] (uix/use-state nil)
         [screen set-screen!] (uix/use-state :home)
         [questions set-questions!] (uix/use-state (randomize-questions))
         [points set-points!] (uix/use-state 0)]
-    ($ :div.app
-       (case screen
-         :home ($ home {:set-screen! set-screen!})
-         :result ($ result {:correct? (= answer 1)
-                            :points points
-                            :last-question? (= 1 (count questions))
-                            :next-question! (fn []
+    ($ :<>
+       ($ :div.wrap
+          ($ :div.app
+             (case screen
+               :home ($ home {:set-screen! set-screen!})
+               :result ($ result {:correct? (= answer 1)
+                                  :points points
+                                  :last-question? (= 1 (count questions))
+                                  :next-question! (fn []
+                                                    (set-screen! :question)
+                                                    (set-questions! (rest questions))
+                                                    (set-answer! nil))
+                                  :restart! (fn []
+                                              (set-questions! (randomize-questions))
+                                              (set-points! 0)
                                               (set-screen! :question)
-                                              (set-questions! (rest questions))
-                                              (set-answer! nil))
-                            :restart! (fn []
-                                        (set-questions! (randomize-questions))
-                                        (set-points! 0)
-                                        (set-screen! :question)
-                                        (set-answer! nil))})
-         :question ($ question {:answer answer
-                                :set-answer! set-answer!
-                                :on-submit (fn []
-                                             (when (= answer 1)
-                                               (set-points! (+ 5 points)))
-                                             (set-screen! :result))
-                                :question (first questions)})))))
+                                              (set-answer! nil))})
+               :question ($ question {:answer answer
+                                      :set-answer! set-answer!
+                                      :on-submit (fn []
+                                                   (when (= answer 1)
+                                                     (set-points! (+ 5 points)))
+                                                   (set-screen! :result))
+                                      :question (first questions)}))))
+       ($ backgrounds))))
 
 (defonce root
   (uix.dom/create-root (js/document.getElementById "root")))

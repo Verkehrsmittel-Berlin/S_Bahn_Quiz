@@ -20,12 +20,31 @@ body {
     -moz-font-feature-settings: "liga" on;
     line-height: 1.4;
     text-rendering: optimizeLegibility;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100vw;
     height: 100vh;
-    background-image: url(bg.webp);
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+
+.wrap {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    position: relative;
+    z-index: 2;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-position: 35% 50%;
     background-size: cover;
 }
