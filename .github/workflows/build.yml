@@ -1,99 +1,77 @@
 name: Checks & deploy
 run-name: Fmt, lint, test, build, & deploy to gh-pages
-on: [push]
+
+on:
+  push:
+    branches: [ main ]
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install tools from asdf config
-        uses: ai/asdf-cache-action@v1
-      - name: Cache Clojure dependencies
-        uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: ai/asdf-cache-action@v1
+      - uses: actions/cache@v3
         with:
-          path: |
-            ~/.m2/repository
-          # List all files containing dependencies:
+          path: ~/.m2/repository
           key: cljdeps-${{ hashFiles('deps.edn') }}
           restore-keys: cljdeps-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
+      - id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Cache yarn dependencies
-        uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - uses: actions/cache@v3
+        id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Run formatter
-        run: yarn check-fmt
+          restore-keys: ${{ runner.os }}-yarn-
+      - run: yarn check-fmt
+
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install tools from asdf config
-        uses: ai/asdf-cache-action@v1
-      - name: Cache Clojure dependencies
-        uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: ai/asdf-cache-action@v1
+      - uses: actions/cache@v3
         with:
-          path: |
-            ~/.m2/repository
-          # List all files containing dependencies:
+          path: ~/.m2/repository
           key: cljdeps-${{ hashFiles('deps.edn') }}
           restore-keys: cljdeps-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
+      - id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Cache yarn dependencies
-        uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - uses: actions/cache@v3
+        id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Run linter
-        run: yarn lint
+          restore-keys: ${{ runner.os }}-yarn-
+      - run: yarn lint
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install tools from asdf config
-        uses: ai/asdf-cache-action@v1
-      - name: Cache Clojure dependencies
-        uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: ai/asdf-cache-action@v1
+      - uses: actions/cache@v3
         with:
-          path: |
-            ~/.m2/repository
-          # List all files containing dependencies:
+          path: ~/.m2/repository
           key: cljdeps-${{ hashFiles('deps.edn') }}
           restore-keys: cljdeps-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
+      - id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Cache yarn dependencies
-        uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - uses: actions/cache@v3
+        id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install npm deps
-        run: yarn install --frozen-lockfile
-      - name: Build cljs & css
-        run: yarn release
-      - name: Upload assets
-        uses: actions/upload-pages-artifact@v1
+          restore-keys: ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn release
+      - uses: actions/upload-pages-artifact@v1
         with:
           name: github-pages
           path: public
@@ -105,9 +83,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Setup Pages
-        id: pages
+      - id: pages
         uses: actions/configure-pages@v4
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v3
