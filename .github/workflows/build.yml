@@ -71,7 +71,7 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
       - run: yarn install --frozen-lockfile
       - run: yarn release
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v4
         with:
           name: github-pages
           path: public
