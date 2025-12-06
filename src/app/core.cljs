@@ -89,7 +89,62 @@
           ($ :button.btn.btn-primary {:on-click on-submit
                                       :disabled (not answer)} "Abschicken")))))
 
-(defui result [{:keys [correct? points next-question! last-question? restart!]}]
+(defn format-date [^js/Date d]
+  (str (.getDate d)
+       "."
+       (inc (.getMonth d))
+       "."
+       (.getFullYear d)
+       " "
+       (.getHours d)
+       ":"
+       (.getMinutes d)))
+
+(defui highscore [{:keys [points profile game-id]}]
+  (let [current-score {:points points
+                       :name (:name profile)
+                       :line (:line profile)
+                       :date (-> (js/Date.)
+                                 (format-date))
+                       :game-id game-id}
+        stored-score (-> (js/localStorage.getItem "highscore")
+                         js/JSON.parse
+                         (js->clj {:keywordize-keys true})
+                         vec)
+        game-ids (->> stored-score
+                      (map :game-id)
+                      set)
+        _ (prn stored-score)
+        score (if (contains? game-ids game-id)
+                stored-score
+                (->> (conj stored-score current-score)
+                     (sort-by :points)
+                     reverse
+                     (take 5)))]
+    (uix/use-effect
+     (fn []
+       (->> score
+            clj->js
+            js/JSON.stringify
+            (js/localStorage.setItem "highscore")))
+     [score])
+    ($ :<>
+       ($ :h2 "Highscore")
+       ($ :table.highscore
+          ($ :tr
+             ($ :th "Punkte")
+             ($ :th "Name")
+             ($ :th "Linie")
+             ($ :th "Datum"))
+          (map-indexed (fn [idx {:keys [points name line date]}]
+                         ($ :tr {:key idx}
+                            ($ :td points)
+                            ($ :td name)
+                            ($ :td line)
+                            ($ :td date)))
+                       score)))))
+
+(defui result [{:keys [correct? points next-question! last-question? restart! profile game-id]}]
   (let [[display-points set-display-points!] (uix/use-state (if correct?
                                                               (- points 5)
                                                               points))]
@@ -115,6 +170,9 @@
                   (if (>= display-points 20)
                     "Du hast das Quiz geschafft! Du bist ein echter Profi!"
                     "Du hast das Quiz fast geschafft. Gib nicht auf!")
+                  ($ highscore {:points points
+                                :profile profile
+                                :game-id game-id})
                   ($ :div.action
                      ($ :button.btn.btn-outline-danger.btn-lg {:on-click restart!} "Noch mal spielen")))
                ($ :div.action
@@ -127,11 +185,45 @@
      "Herzlich Willkommen bei meinem Quiz. Wenn du alle Fragen richtig beantwortest, dann kennst du Berlin und seine Verkehrsmittel gut."
      ($ :div.action
         ($ :button.btn.btn-outline-danger.btn-lg {:on-click #(set-screen! :question)} "Level 1"))
-     ($ :div.beta "BETA Version 0.0.6 | Was ist neu? Hintergruende. Frage wurde ausgetauscht. \"Level\".")))
+     ($ :div.beta "BETA Version 0.0.7 | Was ist neu? Neue Hintergrundbilder, Weihnachts Update, Favicon, \"Login\".")))
+
+(defui login [{:keys [set-screen! profile set-profile!]}]
+  ($ :div
+     ($ :h1 (str "Hallo"
+                 (when (:name profile)
+                   (str " " (:name profile)))
+                 ", erstelle dein Profil!"))
+     ($ :div
+        ($ :label.form-label {:for "name"} "Name")
+        ($ :input.form-control {:id "name"
+                                :value (or (:name profile)
+                                           "")
+                                :on-change (fn [event]
+                                             (let [value (-> event .-target .-value (subs 0 20))]
+                                               (set-profile! (assoc profile :name value))))}))
+     ($ :div
+        ($ :label.form-label {:for "line"} "Lieblings S-Bahn Linie")
+        ($ :select.form-select {:id "line"
+                                :on-change (fn [event]
+                                             (let [value (-> event .-target .-value)]
+                                               (set-profile! (assoc profile :line value))))}
+           (mapv (fn [line]
+                   ($ :option {:key line
+                               :selected (= line (:line profile))} line))
+                 ["Keine Linie" "S1" "S2" "S25" "S26" "S3" "S5" "S7" "S75" "S8" "S85" "S9" "S41" "S42" "S45" "S46" "S47"])))
+     ($ :div.hint "Deine Daten werden im Browser gespeichert. Nur du kannst sie sehen!")
+     ($ :div.action
+        ($ :button.btn.btn-outline-danger.btn-lg
+           {:on-click (fn []
+                        (when (:name profile)
+                          (js/localStorage.setItem "name" (:name profile)))
+                        (js/localStorage.setItem "line" (:line profile))
+                        (set-screen! :home))}
+           "Starten"))))
 
 (defui backgrounds []
   (let [[opacity set-opacity!] (uix/use-state 0)
-        [images set-images!] (uix/use-state ["bg_erkner.webp" "bg_hh.webp" "bg_tds.webp"])
+        [images set-images!] (uix/use-state ["WeihnachtenS.png" "bg_erkner.webp" "Br485Bild1.jpg" "bg_hh.webp" "bg_tds.webp"])
         transition 1000
         frames 24.0
         wait-time 10000]
@@ -155,17 +247,26 @@
                                    :opacity opacity}}))))
 (defui app []
   (let [[answer set-answer!] (uix/use-state nil)
-        [screen set-screen!] (uix/use-state :home)
+        [screen set-screen!] (uix/use-state :login)
         [questions set-questions!] (uix/use-state (randomize-questions))
-        [points set-points!] (uix/use-state 0)]
+        [points set-points!] (uix/use-state 0)
+        [profile set-profile!] (uix/use-state {:name (js/localStorage.getItem "name")
+                                               :line (js/localStorage.getItem "line")})
+        [game-id set-game-id!] (uix/use-state (-> (random-uuid)
+                                                  str))]
     ($ :<>
        ($ :div.wrap
           ($ :div.app
              (case screen
+               :login ($ login {:profile profile
+                                :set-profile! set-profile!
+                                :set-screen! set-screen!})
                :home ($ home {:set-screen! set-screen!})
                :result ($ result {:correct? (= answer 1)
                                   :points points
+                                  :profile profile
                                   :last-question? (= 1 (count questions))
+                                  :game-id game-id
                                   :next-question! (fn []
                                                     (set-screen! :question)
                                                     (set-questions! (rest questions))
@@ -174,14 +275,20 @@
                                               (set-questions! (randomize-questions))
                                               (set-points! 0)
                                               (set-screen! :question)
-                                              (set-answer! nil))})
+                                              (set-answer! nil)
+                                              (set-game-id! (-> (random-uuid)
+                                                                str)))})
                :question ($ question {:answer answer
                                       :set-answer! set-answer!
                                       :on-submit (fn []
                                                    (when (= answer 1)
                                                      (set-points! (+ 5 points)))
                                                    (set-screen! :result))
-                                      :question (first questions)}))))
+                                      :question (first questions)})))
+          (when-not (= :login screen)
+            ($ :div.login
+               (str "Hallo " (:name profile))
+               ($ :div "☃️❤️ " (:line profile)))))
        ($ backgrounds))))
 
 (defonce root

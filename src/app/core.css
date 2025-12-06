@@ -68,11 +68,25 @@ a {
     text-align: center; 
     margin-top: 20px;
 }
-.beta {
+.beta,
+.hint {
     position: absolute;
     right: 15px;
     bottom: 15px;
 }
 .result {
     text-align: center;
+}
+.login {
+    position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #ffffffb3;
+  border-radius: 10px;
+  padding: 15px 10px;
+}
+table.highscore {
+    margin-left: auto;
+    margin-right: auto;
+
 }
