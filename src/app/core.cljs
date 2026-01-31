@@ -8,49 +8,91 @@
                                  :on-click #(set-answer! no)}
      children))
 
-(def question-list [{:question "Wo endet die S26?"
-                     :answers ["Blankenburg und Teltow Stadt"
-                               "Yorkstr. und Südkreuz"
-                               "Flughafen Berlin Brandenburg und Waßmannsdorf"
-                               "Gesundbrunnen und Potsdamer Platz"]}
-                    {:question "Wann wurde die Br. 485 ausgemustert?"
-                     :answers ["12. November 2023"
-                               "1. Dezember 2023"
-                               "12. Dezember 2023"
-                               "1. Januar 2024"]}
-                    {:question "Wie viele S-Bahn Linien gibt es in Berlin?"
-                     :answers ["16"
-                               "85"
-                               "9"
-                               "15"]}
-                    {:question "Wie viele Triebfahrzeugführer*innen gibt es bei der S-Bahn Berlin? (Stand: 2023)"
-                     :answers ["1.278"
-                               "3.005"
-                               "178"
-                               "2.865"]}
-                    {:question "Wie viele Viertelzüge der Baureihe 480 sind im Betrieb? (Stand 28. Juli 2024)"
-                     :answers ["70"
-                               "110"
-                               "115"
-                               "90"]}
-                    {:question "Wann fuhr die erste S Bahn auf der Stadtbahn nach der Wiedervereinigung von Berlin & Deutschland?"
-                     :answers ["2. Juli 1990"
-                               "1. Juli 1990"
-                               "3. Oktober 1990"
-                               "4. Oktober 1990"]}
-                    {:question "Welche S Bahn hat 2023 im Durchschnitt die meiste Verspaetung bekommen?"
-                     :answers ["S25"
-                               "S1"
-                               "S8"
-                               "S85"]}
-                    {:question "Wann wurde die S-Bahn Berlin als GmbH gegründet?"
-                     :answers ["Am 1. Januar 1995"
-                               "Am 1. Januar 1994"
-                               "Am 1. Januar 2002"
-                               "Am 2. Januar 2002"]}])
+(def question-list [[{:question "Wo endet die S26?"
+                      :answers ["Blankenburg und Teltow Stadt"
+                                "Yorkstr. und Südkreuz"
+                                "Flughafen Berlin Brandenburg und Waßmannsdorf"
+                                "Gesundbrunnen und Potsdamer Platz"]}
+                     {:question "Wann wurde die Br. 485 ausgemustert?"
+                      :answers ["12. November 2023"
+                                "1. Dezember 2023"
+                                "12. Dezember 2023"
+                                "1. Januar 2024"]}
+                     {:question "Wie viele S-Bahn Linien gibt es in Berlin?"
+                      :answers ["16"
+                                "85"
+                                "9"
+                                "15"]}
+                     {:question "Wie viele Triebfahrzeugführer*innen gibt es bei der S-Bahn Berlin? (Stand: 2023)"
+                      :answers ["1.278"
+                                "3.005"
+                                "178"
+                                "2.865"]}
+                     {:question "Wie viele Viertelzüge der Baureihe 480 sind im Betrieb? (Stand 28. Juli 2024)"
+                      :answers ["70"
+                                "110"
+                                "115"
+                                "90"]}
+                     {:question "Wann fuhr die erste S Bahn auf der Stadtbahn nach der Wiedervereinigung von Berlin & Deutschland?"
+                      :answers ["2. Juli 1990"
+                                "1. Juli 1990"
+                                "3. Oktober 1990"
+                                "4. Oktober 1990"]}
+                     {:question "Welche S Bahn hat 2023 im Durchschnitt die meiste Verspaetung bekommen?"
+                      :answers ["S25"
+                                "S1"
+                                "S8"
+                                "S85"]}
+                     {:question "Wann wurde die S-Bahn Berlin als GmbH gegründet?"
+                      :answers ["Am 1. Januar 1995"
+                                "Am 1. Januar 1994"
+                                "Am 1. Januar 2002"
+                                "Am 2. Januar 2002"]}]
+                    [{:question "Es gibt Sechs Viertelzüge in der Baurreihe 481, die als 3 durchgehend begehbare Halbzüge gekennzeihnet sind. Eine der Zugnummern ist hier gesucht"
+                      :answers ["481 602"
+                                "481 542"
+                                "481 514"
+                                "481 628"]}
+                     {:question "Wie lang ist die Strecke der S85? (Stand: 31. Januar 2026)"
+                      :answers ["45,7 km"
+                                "67,6 km"
+                                "58,2 km"
+                                "69 km"]}
+                     {:question "Welche Haltestelle wird NICHT von der S47 angefahren?"
+                      :answers ["S Sonnenallee"
+                                "S Südkreuz"
+                                "S Oberspree"
+                                "S Spindlersfeld"]}
+                     {:question "Was für eine Fahrzeit hat die S5?"
+                      :answers ["78 Minuten"
+                                "71 Minuten"
+                                "65 Minuten"
+                                "83 Minuten"]}
+                     {:question "An wie viele Stationen treffen sich die S1 und die S7?"
+                      :answers ["3 Mal"
+                                "2 Mal"
+                                "4 Mal"
+                                "1 Mal"]}
+                     {:question "Welche der Linien haelt nicht am S Bahnhof Ostkreuz?"
+                      :answers ["S9"
+                                "S75"
+                                "S3"
+                                "S5"]}
+                     {:question "Im welchem Tarifbereich liegt der Halt S Bergfelde (S8)"
+                      :answers ["Tarifbereich C"
+                                "Tarifbereich B"
+                                "Tarifbereich A"
+                                "Tarifbereich D"]}
+                     {:question "Bonusfrage: Welche Linien halten alle am S Südkreuz (auch RE und RB)"
+                      :answers ["S2, S25, S26, S41, S42 S46, S47, RE3, RE4, RE5, RE8, RE20, FEX, RB10"
+                                "S2, S25, S26, S41, S42 S46, S47, RE3, RE4, RE5, RE8, FEX, RB10"
+                                "S2, S25, S26, S41, S42 S45, S47, RE3, RE4, RE5, RE8, RE20, FEX, RB10"
+                                "S2, S25, S26, S41, S42 S46, S47, RE3, RE4, RE5, RE8, RE22, FEX, RB10"]}]])
 
-(defn randomize-questions []
-  (->> question-list
+(defn randomize-questions [level]
+  (prn :randomize-questions level)
+  (prn (get question-list (dec level)))
+  (->> (get question-list (dec level))
        (sort-by #(rand))
        vec))
 
@@ -178,13 +220,20 @@
                ($ :div.action
                   ($ :button.btn.btn-primary {:on-click #(next-question!)} "Nächste Frage"))))))))
 
-(defui home [{:keys [set-screen!]}]
+(defui home [{:keys [set-screen! set-level!]}]
   ($ :div
      ($ :h1 "Willkommen zum S-Bahn-Quiz!")
      ($ :div "Von Verkehrsmittel Berlin")
      "Herzlich Willkommen bei meinem Quiz. Wenn du alle Fragen richtig beantwortest, dann kennst du Berlin und seine Verkehrsmittel gut."
      ($ :div.action
-        ($ :button.btn.btn-outline-danger.btn-lg {:on-click #(set-screen! :question)} "Level 1"))
+        ($ :button.btn.btn-outline-danger.btn-lg {:on-click (fn []
+                                                              (set-level! 1)
+                                                              (set-screen! :question))}
+           "Level 1")
+        ($ :button.btn.btn-outline-danger.btn-lg {:on-click (fn []
+                                                              (set-level! 2)
+                                                              (set-screen! :question))}
+           "Level 2"))
      ($ :div.beta "BETA Version 0.0.7 | Was ist neu? Neue Hintergrundbilder, Weihnachts Update, Favicon, \"Login\".")))
 
 (defui login [{:keys [set-screen! profile set-profile!]}]
@@ -210,7 +259,7 @@
            (mapv (fn [line]
                    ($ :option {:key line
                                :selected (= line (:line profile))} line))
-                 ["Keine Linie" "S1" "S2" "S25" "S26" "S3" "S5" "S7" "S75" "S8" "S85" "S9" "S41" "S42" "S45" "S46" "S47"])))
+                 ["Keine Linie" "S1" "S2" "S25" "S26" "S3" "S5" "S7" "S75" "S8" "S85" "S9" "S41" "S42" "S46" "S47"])))
      ($ :div.hint "Deine Daten werden im Browser gespeichert. Nur du kannst sie sehen!")
      ($ :div.action
         ($ :button.btn.btn-outline-danger.btn-lg
@@ -246,14 +295,19 @@
        ($ :div.background {:style {:background-image (str "url(" (second images) ")")
                                    :opacity opacity}}))))
 (defui app []
-  (let [[answer set-answer!] (uix/use-state nil)
+  (let [[level set-level!*] (uix/use-state 1)
+        [answer set-answer!] (uix/use-state nil)
         [screen set-screen!] (uix/use-state :login)
-        [questions set-questions!] (uix/use-state (randomize-questions))
+        [questions set-questions!] (uix/use-state nil)
         [points set-points!] (uix/use-state 0)
         [profile set-profile!] (uix/use-state {:name (js/localStorage.getItem "name")
                                                :line (js/localStorage.getItem "line")})
         [game-id set-game-id!] (uix/use-state (-> (random-uuid)
-                                                  str))]
+                                                  str))
+        set-level! (fn [level]
+                     (prn :set-level! level)
+                     (set-level!* level)
+                     (set-questions! (randomize-questions level)))]
     ($ :<>
        ($ :div.wrap
           ($ :div.app
@@ -261,7 +315,8 @@
                :login ($ login {:profile profile
                                 :set-profile! set-profile!
                                 :set-screen! set-screen!})
-               :home ($ home {:set-screen! set-screen!})
+               :home ($ home {:set-screen! set-screen!
+                              :set-level! set-level!})
                :result ($ result {:correct? (= answer 1)
                                   :points points
                                   :profile profile
@@ -272,7 +327,7 @@
                                                     (set-questions! (rest questions))
                                                     (set-answer! nil))
                                   :restart! (fn []
-                                              (set-questions! (randomize-questions))
+                                              (set-questions! (randomize-questions level))
                                               (set-points! 0)
                                               (set-screen! :question)
                                               (set-answer! nil)
