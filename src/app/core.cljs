@@ -223,7 +223,7 @@
 
 (defui backgrounds []
   (let [[opacity set-opacity!] (uix/use-state 0)
-        [images set-images!] (uix/use-state ["WeihnachtenS.png" "bg_erkner.webp" "Br485Bild1.jpg" "bg_hh.webp" "bg_tds.webp"])
+        [images set-images!] (uix/use-state ["bg_erkner.webp" "Br485Bild1.jpg" "bg_hh.webp" "bg_tds.webp"])
         transition 1000
         frames 24.0
         wait-time 10000]
